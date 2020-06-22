@@ -9,3 +9,5 @@ for i in ${!s[@]} ; do
 	fi
 done
 
+echo "Server不存在,Server以s开头数字结尾。"
+
