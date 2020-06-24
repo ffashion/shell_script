@@ -14,6 +14,7 @@ getHelp(){
 addSSHServer(){
         # &表示引用前面的pattern
         sed  -i "s/^s=(\(.*[[:space:]]\)\{0,\}/&`echo -n $1` /g" `echo $0`
+        echo "已经添加$1,请使用admin list查看"
 }
 delSSHServer(){
         # \1 \2 \3表示反向引用
@@ -45,9 +46,17 @@ fi
 #addServer相关
 if [[ x"$1" == x"add" ]];then
         if [[ x"$2" == x"ssh" ]];then
-                        delSSHServer "$3"
+                if [[ x"$3" == x"" ]];then
+                        echo "Server为空,请输入正确的Server"
+                        exit -1;
+                fi
+                addSSHServer "$3"
         elif [[ x"$2" == x"mysql" ]];then
-                        delMYSQLServer
+                if [[ x"$3" == x"" ]];then
+                        echo "Server为空,请输入正确的Server"
+                        exit -1;
+                fi
+                addMYSQLServer "$3"
         else
                         echo "请在del后面选择ssh或者mysql"
         fi
