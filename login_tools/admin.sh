@@ -3,6 +3,7 @@ s=(root@zqa.me root@tc.askaskask.cn )
 getList(){
                 echo "你拥有下列服务器"
                 for i in ${!s[@]} ; do
+                                echo -n "s"$i":"
                                 echo ${s[$i]};
                 done
 }
