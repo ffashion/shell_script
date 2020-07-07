@@ -15,10 +15,10 @@ getHelp(){
 
 addSSHServer(){
         echo '正在生成特定机器的公私钥,将存储在~/.ssh/$server_id_rsa 和 $server_id_rsa.pub'
-        ssh-keygen -t rsa -b 4096 -C `echo $1` -f ~/.ssh/`echo "$1"`_id_rsa
+        ssh-keygen -t rsa -b 4096 -C `echo ${1}-$(whoami)` -f ~/.ssh/`echo "$1"`_id_rsa
         
-        echo "开始上传公钥文件"
-        ssh-copy-id -i "~/.ssh/${1}_id_rsa" "$1"
+        echo "上传公钥文件"
+        ssh-copy-id -f -i ~/.ssh/${1}_id_rsa.pub "$1"
         # &表示引用前面的pattern
         sed  -i "s/^s=(\(.*[[:space:]]\)\{0,\}/&`echo -n $1` /g" `echo $0`
         echo "已经添加$1,请使用admin list查看"
@@ -37,7 +37,7 @@ delMYSQLServer(){
 sshAdmin(){
         for i in ${!s[@]} ; do
         if [[ x"$1" == x"s"$i ]]; then
-                        ssh ${s[$i]} ;
+                ssh -i ~/.ssh/${s[$i]}_id_rsa ${s[$i]};
         fi
         done
 }
