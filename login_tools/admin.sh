@@ -2,6 +2,7 @@
 s=(root@zqa.me root@tc.askaskask.cn )
 getList(){
                 echo "你拥有下列服务器"
+                # 这里的i从0到开始增加
                 for i in ${!s[@]} ; do
                                 echo -n "s"$i":"
                                 echo ${s[$i]};
@@ -9,15 +10,21 @@ getList(){
 }
 getHelp(){
                 echo "第一个参数为command，它可以是list help add del mysql ssh等"
-                echo "第二个参数为服务器的地址，以s开头 数字结尾"
+                echo "第二个参数为服务器的地址，以s开头 数字结尾" 
 }
 
 addSSHServer(){
+        echo '正在生成特定机器的公私钥,将存储在~/.ssh/$server_id_rsa 和 $server_id_rsa.pub'
+        ssh-keygen -t rsa -b 4096 -C `echo $1` -f ~/.ssh/`echo "$1"`_id_rsa
+        
+        echo "开始上传公钥文件"
+        ssh-copy-id -i "~/.ssh/${1}_id_rsa" "$1"
         # &表示引用前面的pattern
         sed  -i "s/^s=(\(.*[[:space:]]\)\{0,\}/&`echo -n $1` /g" `echo $0`
         echo "已经添加$1,请使用admin list查看"
 }
-delSSHServer(){
+delSSHServer(){ 
+        #if [[ x"s"]]
         # \1 \2 \3表示反向引用
         sed -i "s/\(s=(\)\(.*\)"$1" \(.*\)/\1\2\3/g" `echo $0`
 }
