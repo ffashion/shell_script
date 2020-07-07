@@ -1,5 +1,5 @@
 #!/bin/bash
-s=(root@zqa.me root@tc.askaskask.cn )
+s=(root@zqa.me root@tc.askaskask.cn)
 getList(){
                 echo "你拥有下列服务器"
                 # 这里的i从0到开始增加
@@ -15,10 +15,15 @@ getHelp(){
 
 addSSHServer(){
         echo '正在生成特定机器的公私钥,将存储在~/.ssh/$server_id_rsa 和 $server_id_rsa.pub'
-        ssh-keygen -t rsa -b 4096 -C `echo ${1}-$(whoami)` -f ~/.ssh/`echo "$1"`_id_rsa
+                # 判断文件是否存在，软链接或者普通文件
+                if [ -e  ~/.ssh/${1}_id_rsa ]; then 
+                        echo "此Server公私钥已存在，跳过创建";
+                else 
+                        ssh-keygen -t rsa -b 4096 -C `echo ${1}-$(whoami)` -f ~/.ssh/`echo "$1"`_id_rsa;
+                        echo "上传公钥文件"
+                        ssh-copy-id -f -i ~/.ssh/${1}_id_rsa.pub "$1"
+                fi 
         
-        echo "上传公钥文件"
-        ssh-copy-id -f -i ~/.ssh/${1}_id_rsa.pub "$1"
         # &表示引用前面的pattern
         sed  -i "s/^s=(\(.*[[:space:]]\)\{0,\}/&`echo -n $1` /g" `echo $0`
         echo "已经添加$1,请使用admin list查看"
