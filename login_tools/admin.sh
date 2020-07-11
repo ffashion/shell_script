@@ -20,14 +20,18 @@ addSSHServer(){
                         echo "此Server公私钥已存在，跳过创建";
                 else 
                         ssh-keygen -t rsa -b 4096 -C `echo ${1}-$(whoami)` -f ~/.ssh/`echo "$1"`_id_rsa;
-                        echo "上传公钥文件"
-                        ssh-copy-id -f -i ~/.ssh/${1}_id_rsa.pub "$1"
+                        echo "上传公钥文件";
+                        ssh-copy-id -f -i "/home/fashion/.ssh/$1_id_rsa.pub" "$1"
+						if [[ $? == 0 ]] ; then  
+      						  # &表示引用前面的pattern
+       	 					  sed  -i "s/^s=(\(.*[[:space:]]\)\{0,\}/&`echo -n $1` /g" `echo $0`
+       						  echo "已经添加$1,请使用admin list查看"
+						fi
+						#rm -rf /home/fashion/.ssh/{$1_id_rsa.pub,$1_id_rsa}
+						echo "Error Accure"
+
                 fi 
-        
-        # &表示引用前面的pattern
-        sed  -i "s/^s=(\(.*[[:space:]]\)\{0,\}/&`echo -n $1` /g" `echo $0`
-        echo "已经添加$1,请使用admin list查看"
-}
+      }
 delSSHServer(){ 
         #if [[ x"s"]]
         # \1 \2 \3表示反向引用
