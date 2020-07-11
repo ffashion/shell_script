@@ -20,9 +20,10 @@ addSSHServer(){
                         echo "此Server公私钥已存在，跳过创建";
                         rm -rf /home/fashion/.ssh/{$1_id_rsa.pub,$1_id_rsa}
                 else 
-                        ssh-keygen -t rsa -b 4096 -C `echo ${1}-$(whoami)` -f ~/.ssh/`echo "$1"`_id_rsa 1>/dev/null 2>&1
+                        ssh-keygen -t rsa -b 4096 -C `echo ${1}-$(whoami)` -f ~/.ssh/`echo "$1"`_id_rsa
                         echo "上传公钥文件";
-                        ssh-copy-id -f -i "/home/fashion/.ssh/$1_id_rsa.pub" "$1" 1>/dev/null 2>&1
+                        # $2 == ~
+                        ssh-copy-id -f -i "$2/.ssh/$1_id_rsa.pub" "$1" 
                                 if [[ $? == 0 ]] ; then  
                                         # &表示引用前面的pattern
                                         sed  -i "s/^s=(\(.*[[:space:]]\)\{0,\}/&`echo -n $1` /g" `echo $0`
@@ -71,7 +72,7 @@ if [[ x"$1" == x"add" ]];then
                         echo "Server为空,请输入正确的Server"
                         exit -1;
                 fi
-                addSSHServer "$3"
+                addSSHServer "$3" ~
         elif [[ x"$2" == x"mysql" ]];then
                 if [[ x"$3" == x"" ]];then
                         echo "Server为空,请输入正确的Server"
