@@ -14,11 +14,19 @@ getHelp(){
 }
 
 addSSHServer(){
-        echo '正在生成特定机器的公私钥,将存储在~/.ssh/$server_id_rsa 和 $server_id_rsa.pub'
+        echo "正在生成特定机器的公私钥,将存储在~/.ssh/$1_id_rsa 和 $1_id_rsa.pub"
                 # 判断文件是否存在，软链接或者普通文件
                 if [ -e  ~/.ssh/${1}_id_rsa ]; then 
                         echo "此Server公私钥已存在，跳过创建";
-                        rm -rf /home/fashion/.ssh/{$1_id_rsa.pub,$1_id_rsa}
+						read -p "是否删除以存在的公私(y/n):" var
+						if [ x"$var" = xy ] || [ x"$var" == xY ];then 
+                   				rm -rf $2/.ssh/{$1_id_rsa.pub,$1_id_rsa};
+								echo "删除成功" 
+						elif [ x"$var" = xn ] || [ x"$var" = xN ];then 
+								echo "已取消删除"
+						else
+								echo "请输入(y|Y)|(n|N)"
+						fi
                 else 
                         ssh-keygen -t rsa -b 4096 -C `echo ${1}-$(whoami)` -f ~/.ssh/`echo "$1"`_id_rsa
                         echo "上传公钥文件";
@@ -29,7 +37,7 @@ addSSHServer(){
                                         sed  -i "s/^s=(\(.*[[:space:]]\)\{0,\}/&`echo -n $1` /g" `echo $0`
                                         echo "已经添加$1,请使用admin list查看"
                                 else 
-                                        rm -rf /home/fashion/.ssh/{$1_id_rsa.pub,$1_id_rsa}
+                                        rm -rf $2/.ssh/{$1_id_rsa.pub,$1_id_rsa}
                                         echo "Error Accure"
                                 fi
 
