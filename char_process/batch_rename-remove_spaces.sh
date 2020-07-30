@@ -1,5 +1,5 @@
 for i in * ; do
-		[ -e "$i" ] || continue
+		[ -e "$i" ] || continue #continue跳出for循环
 		no_space_i=`echo "$i" | sed s/[[:space:]]//g`
 		echo "$no_space_i"
 		if [[ "$i" != "$no_space_i" ]]; then 
