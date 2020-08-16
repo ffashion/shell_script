@@ -91,7 +91,7 @@ addSSHServer(){
                                         echo "软链接失败,请检查"
                                 fi
                         else
-                                ln -s $private_file ${2}/.ssh/${1}_id_rsa
+                                ln -s ${private_file} ${2}/.ssh/${1}_id_rsa
                                 if [ $? -eq 0 ];then 
                                         echo "软链接成功"
                                         addSshServer $1
@@ -154,7 +154,7 @@ if [[ x"$1" == x"add" ]];then
                 fi
                 addMYSQLServer "$3"
         else
-                        echo "请在del后面选择ssh或者mysql"
+                        echo "请在and后面选择ssh或者mysql"
         fi
 fi
 #delServer相关
@@ -164,7 +164,7 @@ if [[ x"$1" == x"del" ]];then
         elif [[ x"$2" == x"mysql" ]];then
                         delMYSQLServer
         else
-                        echo "请在add后面选择ssh或者mysql"
+                        echo "请在del后面选择ssh或者mysql"
         fi
 fi
 # ssh相关
@@ -189,3 +189,5 @@ fi
 
 # 制作一个软链接函数
 # 制作一个echo 颜色函数
+# 按照私钥的软链接划范围，形成域
+# 自动搜索服务器
