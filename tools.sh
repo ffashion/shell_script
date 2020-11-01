@@ -15,4 +15,4 @@ for i in */*.sh ; do
 		echo $file
 		cp  -- $i ~/.bin/$file
 done
-
+mv ~/.bin/admin-ng  ~/.bin/admin
