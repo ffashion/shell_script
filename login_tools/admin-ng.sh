@@ -1,6 +1,26 @@
 #!/bin/bash
 export sshDir=~/.ssh
 export etcDir=~/.etc
+echoColor(){
+    case $1 in 
+        "r")
+            echo -e "\033[31m $2\033[0m"
+            ;;
+        "g")
+            echo -e "\033[32m $2\033[0m"
+            ;;
+        "bl")
+            echo -e "\033[36m $2\033[0m"
+            ;;
+        *)
+            echo "color select error"
+            ;;
+    esac
+}
+useage() {
+	echo "For example :"
+	echo "admin ssh add rasp:root@192.168.123.1"
+}
 checkEnv(){
     mkdir -p ${etcDir}
     touch ${etcDir}/serverList
@@ -49,16 +69,16 @@ case $1 in
                 
                 ssh-copy-id -f -i ${sshDir}/${group}:main_id_rsa ${server} 
                 if [ $? -eq 0 ];then
-                    echo "add Server成功"
+                    echoColor g "add Server成功"
                     echo "${group}${serverIdMaxByGroup}:${server}" >> ${etcDir}/serverList
                 else
-                    echo "add Server失败"
+                    echoColor r "add Server失败"
                     rm -rf ${rsa_file} ${pub_file}
                 fi
                 
             ;;
             *)
-                echo "完善中"
+                echoColor bl "完善中"
             ;;
         esac
     ;;
@@ -74,7 +94,7 @@ case $1 in
     "update")
         mv ${etcDir}/serverList ${etcDir}/serverList.backup 
         for i in ${sshDir}/*[[:digit:]]*id_rsa ;do
-                 [ -e "$i" ] || continue 
+                 [ -e "$i" ] || continue  
                 list=`echo $i | sed s#${sshDir}/## | sed s/_id_rsa$//`
                 echo ${list} >> ${etcDir}/serverList
         done
@@ -99,7 +119,10 @@ case $1 in
     "sort")
         sort ${etcDir}/serverList -o ${etcDir}/serverList
     ;;
+	"help")
+			useage
+	;;
     *)
-        echo "parameter one error or null"
+        echoColor r "Error: parameter one error or null"
     ;;
 esac
