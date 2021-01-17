@@ -1,0 +1,1 @@
+ps -A -o user,pid,ppid,pgrp,session,tty,cmd
