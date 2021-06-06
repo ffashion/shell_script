@@ -1,4 +1,7 @@
-export command_list=("bash" "ls" "dpkg" "apt" "whoami" "whereis" "vim" "cat" "grep" "awk" "adduser" "groups" "perl" "su" "sudo" "passwd" "id" "mknod" "rm" "cp" "mv" "file" "mkdir"
+export command_list=("bash" "ls" "dpkg" "apt" \
+"whoami" "whereis" "vim" "cat" "grep" "awk" \
+"adduser" "groups" "perl" "su" "sudo" "passwd" \
+"id" "mknod" "rm" "cp" "mv" "file" "mkdir"
 )
 create_file(){
     echo "create sys file"
